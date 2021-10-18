@@ -7,10 +7,13 @@ import (
 	"net/url"
 )
 
+const Api = "https://api.qweather.com"
+const DevApi = "https://devapi.qweather.com"
 const GeoApi = "https://geoapi.qweather.com"
 
 type baseRequest struct {
-	Key string `json:"key,omitempty"`
+	Key   string `json:"key,omitempty"`
+	IsDev bool   `json:"isDev,omitempty"` // 是否为开发环境,默认为线上
 }
 
 type baseResponse struct {
