@@ -45,7 +45,7 @@ type V7IndicesResponse struct {
 		Level    string `json:"level,omitempty"`    // 生活指数预报等级
 		Category string `json:"category,omitempty"` // 生活指数预报级别名称
 		Text     string `json:"text,omitempty"`     // 生活指数预报的详细描述,可能为空
-	}
+	} `json:"daily,omitempty"`
 }
 
 func (r *V7IndicesResponse) String() string {
