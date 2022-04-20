@@ -10,6 +10,7 @@ import (
 const Api = "https://api.qweather.com"
 const DevApi = "https://devapi.qweather.com"
 const GeoApi = "https://geoapi.qweather.com"
+const DatasetApi = "https://datasetapi.qweather.com"
 
 type baseRequest struct {
 	Key   string `json:"key,omitempty"`
