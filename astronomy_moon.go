@@ -44,7 +44,7 @@ type V7AstronomyMoonResponse struct {
 		Value        string `json:"value"`        // 月相数值
 		Name         string `json:"name"`         // 月相名称
 		Icon         string `json:"icon"`         // 月相图标代码,图标可通过[天气状况和图标]下载
-		illumination string `json:"illumination"` // 月亮照明度,百分比数值
+		Illumination string `json:"illumination"` // 月亮照明度,百分比数值
 	} `json:"moonPhase"`
 }
 
