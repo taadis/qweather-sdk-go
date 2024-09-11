@@ -63,7 +63,7 @@ type V7TropicalStormTrackResponse struct {
 			SeRadius string `json:"seRadius"` // 台风12级风圈东南半径,可能为空
 			SwRadius string `json:"swRadius"` // 台风12级风圈西南半径,可能为空
 			NwRadius string `json:"nwRadius"` // 台风12级风圈西北半径,可能为空
-		} `json:"WindRadius50"`
+		} `json:"WindRadius64"`
 	} `json:"now"`
 	Track []struct {
 		Time         string `json:"time"`      // 当前台风信息发布时间
@@ -91,7 +91,7 @@ type V7TropicalStormTrackResponse struct {
 			SeRadius string `json:"seRadius"` // 台风12级风圈东南半径,可能为空
 			SwRadius string `json:"swRadius"` // 台风12级风圈西南半径,可能为空
 			NwRadius string `json:"nwRadius"` // 台风12级风圈西北半径,可能为空
-		} `json:"WindRadius50"`
+		} `json:"WindRadius64"`
 	} `json:"track"`
 }
 
