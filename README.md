@@ -54,6 +54,28 @@ func main() {
 
 ```
 
+启用日志
+
+内置了 `log/slog` 默认日志示例，可配置选项参数 `WithLogEnabled(true)` 来启用日志输出，以便排查定位问题
+
+```go
+client := NewClient(WithLogEnabled(true))
+
+```
+
+使用自定义 `log/slog`
+
+也可以通过选项参数 `WithLogger(logger)` 来传入自定义的 `log/slog`
+
+```go
+logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+	Level: slog.LevelInfo,
+}))
+
+client := NewClient(WithLogger(logger), WithLogEnabled(true))
+
+```
+
 > your_qweather_key 为你在和风天气服务注册并申请的应用key,不要填错了哦.
 
 还没有注册的小伙伴可以从这里开始 [和风天气开发服务](https://dev.qweather.com/)

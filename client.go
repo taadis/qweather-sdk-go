@@ -1,10 +1,14 @@
 package qweather
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
+
+	"log/slog"
 )
 
 const Api = "https://api.qweather.com"
@@ -34,10 +38,25 @@ type Responder interface {
 }
 
 type Client struct {
+	logger     *slog.Logger
+	logEnabled bool
+
+	respBodyRaw string
 }
 
-func NewClient() *Client {
-	return new(Client)
+func NewClient(options ...Option) *Client {
+	c := &Client{
+		logger:     slog.Default(),
+		logEnabled: false,
+	}
+	for _, option := range options {
+		option(c)
+	}
+	return c
+}
+
+func (c *Client) GetResponseBodyRaw() string {
+	return c.respBodyRaw
 }
 
 func (c *Client) Do(request Requester, response Responder) error {
@@ -59,11 +78,18 @@ func (c *Client) Do(request Requester, response Responder) error {
 
 	method := request.Method()
 	u, err := url.Parse(request.Url())
+	if err != nil {
+		return err
+	}
 	u.RawQuery = ps.Encode()
 
 	req, err := http.NewRequest(method, u.String(), nil)
 	if err != nil {
 		return err
+	}
+
+	if c.logEnabled {
+		c.logger.Info("starting request", "method", request.Method(), "url", request.Url())
 	}
 
 	resp, err := http.DefaultClient.Do(req)
@@ -72,9 +98,21 @@ func (c *Client) Do(request Requester, response Responder) error {
 	}
 	defer resp.Body.Close()
 
-	err = json.NewDecoder(resp.Body).Decode(response)
+	// 使用 `io.TeeReader` 同时读取响应体并将其复制到缓冲区,规避2次解析resp.Body
+	var buf bytes.Buffer
+	tee := io.TeeReader(resp.Body, &buf)
+
+	// response json to struct
+	err = json.NewDecoder(tee).Decode(response)
 	if err != nil {
 		return err
+	}
+
+	// response raw text
+	c.respBodyRaw = buf.String()
+
+	if c.logEnabled {
+		c.logger.Info("response", "body raw", c.respBodyRaw)
 	}
 
 	return nil
